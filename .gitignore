@@ -1,0 +1,28 @@
+# Composer dependencies
+/vendor/
+ 
+# Composer lock is debated - for a LIBRARY omit it, for an APP commit it
+# Since this is a library, we exclude it:
+composer.lock
+ 
+# PHPUnit cache
+.phpunit.result.cache
+.phpunit.cache/
+ 
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+nbproject/
+ 
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ 
+# macOS (ak projekt zdielate s Mac usermi)
+.DS_Store
+ 
+# Logs & temp
+*.log
+/tmp/

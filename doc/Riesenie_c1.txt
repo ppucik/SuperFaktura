@@ -1,0 +1,47 @@
+===========================================================
+1. Klasické riešenie s optimalizáciou (Čistý a rýchly)
+===========================================================
+<?php
+
+for ($i = 1; $i <= 100; $i++) {
+    $output = '';
+    if ($i % 3 === 0) $output .= 'Super';
+    if ($i % 5 === 0) $output .= 'Faktura';
+    echo $output ?: $i . PHP_EOL;
+}
+
+-----------------------------------------------------------
+2. Riešenie s match (PHP 8.0+)
+-----------------------------------------------------------
+<?php
+
+for ($i = 1; $i <= 100; $i++) {
+    echo match (true) {
+        $i % 15 === 0 => 'SuperFaktura',
+        $i % 3 === 0  => 'Super',
+        $i % 5 === 0  => 'Faktura',
+        default       => $i
+    } . PHP_EOL;
+}
+
+-----------------------------------------------------------
+<?php
+
+$rules = [
+    15 => 'SuperFaktura',
+    3  => 'Super',
+    5  => 'Faktura',
+];
+
+for ($i = 1; $i <= 100; $i++) {
+    $result = $i;
+    
+    foreach ($rules as $divisor => $label) {
+        if ($i % $divisor === 0) {
+            $result = $label;
+            break; // Zastavíme na prvej zhode (preto je 15 prvá)
+        }
+    }
+    
+    echo $result . PHP_EOL;
+}
