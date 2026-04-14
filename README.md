@@ -69,22 +69,6 @@ composer install
 ./vendor/bin/phpunit
 ```
 
-## Štruktúra projektu
-
-```
-src/
-  AresService.php        # Hlavný vstupný bod (fasáda)
-  AresClient.php         # HTTP klient pre ARES API
-  IcoValidator.php       # Validácia IČO (formát + kontrolný súčet)
-  DTO/
-    CompanyData.php      # Immutable DTO s dátami firmy
-  Exception/
-    AresException.php    # Hierarchia výnimiek
-tests/
-  IcoValidatorTest.php   # Unit testy validátora
-  AresServiceTest.php    # Unit testy service (mockovaný HTTP klient)
-```
-
 ## SOLID princípy
 
 | Princíp                       | Ako je dodržaný                                                               |
