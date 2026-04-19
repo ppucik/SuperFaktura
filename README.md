@@ -66,7 +66,9 @@ foreach ($results as $ico => $result) {
 
 ```bash
 composer install
-./vendor/bin/phpunit
+composer dump-autoload
+vendor/bin/phpunit --testdox
+php example.php
 ```
 
 ## SOLID princípy
