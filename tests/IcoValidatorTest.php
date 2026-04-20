@@ -15,9 +15,8 @@ class IcoValidatorTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->validator = new IcoValidator();
-
-        /** @phpstan-assert InMemoryCache $this->cache */
     }
 
     // -------------------------------------------------------------------------

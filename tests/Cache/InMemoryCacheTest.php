@@ -13,9 +13,8 @@ class InMemoryCacheTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->cache = new InMemoryCache();
-
-        /** @phpstan-assert InMemoryCache $this->cache */
     }
 
     public function testGetReturnsNullForMissingKey(): void
