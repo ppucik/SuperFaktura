@@ -9,12 +9,10 @@ parameters:
   excludePaths:
     - .github
     - vendor
-    # - build (?)
-    # - var (?)
 
   # Povolené rozšírenia
   scanFiles:
-    - %rootDir%/../../vendor/autoload.php
+    - vendor/autoload.php
 
   # Prísnejšie pravidlá
   checkMissingVarTagTypehint: true
