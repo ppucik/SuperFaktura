@@ -82,7 +82,7 @@ class AresClient implements AresClientInterface
      * 
      * @param string $body The raw JSON response body
      * @param string $ico The IČO for error context
-     * @return array The decoded data as an associative array
+     * @return array<string, mixed>
      * @throws AresException If JSON decoding fails
      */
     private function decodeJson(string $body, string $ico): array
