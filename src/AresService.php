@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SuperFaktura;
 
+use SuperFaktura\Contract\AresClientInterface;
 use SuperFaktura\DTO\CompanyData;
 use SuperFaktura\Exception\AresException;
 use SuperFaktura\Exception\InvalidIcoException;
@@ -23,8 +24,8 @@ use SuperFaktura\Exception\InvalidIcoException;
 class AresService
 {
     public function __construct(
-        private readonly IcoValidator $validator,
-        private readonly AresClient   $client,
+        private readonly IcoValidator        $validator,
+        private readonly AresClientInterface $client,
     ) {}
 
     /**
@@ -34,7 +35,7 @@ class AresService
     {
         return new self(
             validator: new IcoValidator(),
-            client:    new AresClient(timeout: $timeoutSeconds),
+            client: new AresClient(timeout: $timeoutSeconds),
         );
     }
 

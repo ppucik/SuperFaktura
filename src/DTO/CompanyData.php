@@ -38,7 +38,7 @@ final readonly class CompanyData
             city:      isset($address['nazevObce']) ? (string) $address['nazevObce'] : null,
             zip:       isset($address['psc']) ? (string) $address['psc'] : null,
             country:   isset($address['nazevStatu']) ? (string) $address['nazevStatu'] : null,
-            isActive: in_array($data['stavSubjektu'] ?? null, ['AKTIVNI', 'AKTIVNÍ'], true),
+            isActive:  in_array($data['stavSubjektu'] ?? null, ['AKTIVNI', 'AKTIVNÍ'], true),
         );
     }
 

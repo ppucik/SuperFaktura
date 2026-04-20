@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SuperFaktura\Tests;
 
-use SuperFaktura\AresClient;
+use SuperFaktura\Contract\AresClientInterface;
 use SuperFaktura\AresService;
 use SuperFaktura\DTO\CompanyData;
 use SuperFaktura\Exception\AresNotFoundException;
@@ -22,7 +22,7 @@ class AresServiceTest extends TestCase
     {
         $validator = new IcoValidator();
 
-        $client = $this->createMock(AresClient::class);
+        $client = $this->createMock(AresClientInterface::class);
         $client->method('fetchByIco')->willReturn($rawApiResponse);
 
         return new AresService($validator, $client);
@@ -92,7 +92,7 @@ class AresServiceTest extends TestCase
 
     public function testInvalidIcoThrows(): void
     {
-        $client    = $this->createMock(AresClient::class);
+        $client = $this->createMock(AresClientInterface::class);
         $client->expects($this->never())->method('fetchByIco');
         $service = new AresService(new IcoValidator(), $client);
 
@@ -107,7 +107,7 @@ class AresServiceTest extends TestCase
     public function testGetByIcoMultipleHandlesPartialFailures(): void
     {
         $validator = new IcoValidator();
-        $client    = $this->createMock(AresClient::class);
+        $client    = $this->createMock(AresClientInterface::class);
 
         $client->method('fetchByIco')
             ->willReturnCallback(function (string $ico) {
@@ -126,17 +126,38 @@ class AresServiceTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
-    // Inactive company
+    // isActive flag
     // -------------------------------------------------------------------------
 
     public function testInactiveCompanyFlagIsSet(): void
     {
-        $response              = $this->sampleApiResponse();
+        $response                 = $this->sampleApiResponse();
         $response['stavSubjektu'] = 'ZANIKLÝ';
 
-        $service = $this->makeService($response);
-        $company = $service->getByIco('01569651');
+        $company = $this->makeService($response)->getByIco('01569651');
 
         $this->assertFalse($company->isActive);
+    }
+
+    public function testActiveCompanyWithoutDiacritics(): void
+    {
+        // ARES niekedy vráti 'AKTIVNI' (bez diakritiky)
+        $response                 = $this->sampleApiResponse();
+        $response['stavSubjektu'] = 'AKTIVNI';
+
+        $company = $this->makeService($response)->getByIco('01569651');
+
+        $this->assertTrue($company->isActive);
+    }
+
+    public function testActiveCompanyWithDiacritics(): void
+    {
+        // ARES niekedy vráti 'AKTIVNÍ' (s diakritikou) — bug fix verifikácia
+        $response                 = $this->sampleApiResponse();
+        $response['stavSubjektu'] = 'AKTIVNÍ';
+
+        $company = $this->makeService($response)->getByIco('01569651');
+
+        $this->assertTrue($company->isActive);
     }
 }

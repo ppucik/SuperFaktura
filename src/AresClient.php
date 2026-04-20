@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SuperFaktura;
 
+use SuperFaktura\Contract\AresClientInterface;
 use SuperFaktura\Exception\AresConnectionException;
 use SuperFaktura\Exception\AresNotFoundException;
 use SuperFaktura\Exception\AresException;
@@ -12,7 +13,7 @@ use SuperFaktura\Exception\AresException;
  * HTTP client for communicating with the ARES API.
  * Responsible solely for making HTTP requests (Single Responsibility).
  */
-class AresClient
+class AresClient implements AresClientInterface
 {
     private const BASE_URL = 'https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty';
     private const DEFAULT_TIMEOUT = 10;
