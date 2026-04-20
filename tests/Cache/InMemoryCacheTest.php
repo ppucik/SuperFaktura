@@ -9,13 +9,13 @@ use PHPUnit\Framework\TestCase;
 
 class InMemoryCacheTest extends TestCase
 {
-    private ?InMemoryCache $cache = null;
+    private InMemoryCache $cache;
 
     protected function setUp(): void
     {
         $this->cache = new InMemoryCache();
 
-        assert($this->cache instanceof InMemoryCache);
+        /** @phpstan-assert InMemoryCache $this->cache */
     }
 
     public function testGetReturnsNullForMissingKey(): void
