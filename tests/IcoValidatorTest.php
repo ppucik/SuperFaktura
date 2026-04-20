@@ -11,11 +11,13 @@ use PHPUnit\Framework\TestCase;
 
 class IcoValidatorTest extends TestCase
 {
-    private ?IcoValidator $validator = null;
+    private IcoValidator $validator;
 
     protected function setUp(): void
     {
         $this->validator = new IcoValidator();
+
+        /** @phpstan-assert InMemoryCache $this->cache */
     }
 
     // -------------------------------------------------------------------------
