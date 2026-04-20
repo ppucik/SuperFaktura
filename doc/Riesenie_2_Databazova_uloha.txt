@@ -1,9 +1,5 @@
-===========================================================
-2. SQL Query na nájdenie duplicitných hodnôt
-===========================================================
-
 -----------------------------------------------------------
-Základné riešenie (použitie GROUP BY a HAVING)
+1. Základné riešenie (použitie GROUP BY a HAVING)
 -----------------------------------------------------------
 SELECT d1.*
 FROM duplicates d1
@@ -49,48 +45,21 @@ WHERE count > 1
 ORDER BY value;
 
 Výhody:
-Moderné (využíva oknové funkcie).
+Moderné (využíva Window funkcie).
 Flexibilné (ľahko sa rozširuje o ďalšie agregácie).
 
 -----------------------------------------------------------
 4. Riešenie pre veľké tabuľky (Optimalizované)
 -----------------------------------------------------------
-Ak má tabuľka milióny riadkov, odporúčam:
-
-1.) Pridať index na value (ak ešte nie je):
+Ak má tabuľka milióny riadkov, odporúčam pridať index na value:
 
 CREATE INDEX idx_value ON duplicates(value);
 
-===========================================================
-
-Otázka: Vysvetlite, prečo a ako by ste prípadne ďalej optimalizovali.
-
-1. Index na stĺpci value (Kritické):
-Toto je prvá a najdôležitejšia optimalizácia.
-
-Vďaka indexu databáza nemusí riadky hľadať po celom disku. 
-Index je v podstate zoznam hodnôt zoradený v B-Tree štruktúre, 
-takže databáza okamžite "vidí", kde sa duplikáty nachádzajú.
-
-2. EXPLAIN Command:
-Pred nasadením by som určite použil EXPLAIN pred query. 
-Ten mi povie, či databáza naozaj používa index, koľko riadkov predpokladá, 
-že musí prejsť, a či nevytvára obrovské dočasné tabuľky 
-(Using temporary; Using filesort).
-
-3. Pokročilá optimalizácia (Covering Index):
+Pokročilá optimalizácia (Covering Index):
 Ak by tabuľka mala veľa ďalších stĺpcov, vytvoril by som index, 
 ktorý obsahuje aj id, nielen value: 
-CREATE INDEX idx_value_id ON duplicates(value, id);.
+
+CREATE INDEX idx_value_id ON duplicates(value, id);
+
 Tým vznikne tzv. Covering Index – databáza dokáže celú query vyriešiť priamo 
 v pamäti indexu a vôbec nemusí "siahnuť" na pôvodnú veľkú tabuľku na disku.
-
-4. Batch processing (ak ide o cleanup):
-Ak je cieľom duplikáty nájsť a následne zmazať v obrovskej tabuľke (napr. 100 miliónov riadkov), 
-nerobil by som to jednou query. Rozdelil by som si to na menšie dávky (batching) podľa rozsahu ID, 
-aby som nezablokoval databázu pre ostatných používateľov.
-
-Zhrnutie pre pohovor: 
-"Riešenie s GROUP BY je správne, ale jeho efektivita pri milióne riadkov stojí a padá 
-na existencii indexu na stĺpci value. 
-Pri takomto objeme by som určite kontroloval exekučný plán a zvažoval covering index." 
