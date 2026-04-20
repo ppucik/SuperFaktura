@@ -21,6 +21,12 @@ parameters:
   checkExplicitMixed: true
   checkUninitializedProperties: true
 
+  # Pridajte toto pravidlo pre ignorovanie chýb v testoch:
+  ignoreErrors:
+    -
+      message: '#^Class .* has an uninitialized property .*\. Give it default value or assign it in the constructor\.$#'
+      path: tests/*
+
   # Povolené typy pre JSON decode, API odpovede a dynamické polia
   universalObjectCratesClasses:
     - stdClass

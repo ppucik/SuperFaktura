@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class IcoValidatorTest extends TestCase
 {
-    /** @phpstan-ignore-next-line */
     private IcoValidator $validator;
 
     protected function setUp(): void

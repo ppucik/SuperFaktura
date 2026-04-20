@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class InMemoryCacheTest extends TestCase
 {
-    /** @phpstan-ignore-next-line */
     private InMemoryCache $cache;
 
     protected function setUp(): void
