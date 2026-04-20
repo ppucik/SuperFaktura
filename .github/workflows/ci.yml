@@ -29,7 +29,7 @@ jobs:
       # Setup PHP
       # -----------------------------
       - name: Set up PHP
-        uses: shivammathur/setup-php@v4
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, intl, json, curl, zip
@@ -40,7 +40,7 @@ jobs:
       # Composer cache
       # -----------------------------
       - name: Cache Composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
