@@ -9,8 +9,8 @@ parameters:
   excludePaths:
     - .github
     - vendor
-    - build (?)   # voliteľné, ak niekedy bude existovať
-    - var (?)     # voliteľné, ak niekedy bude existovať
+    # - build (?)
+    # - var (?)
 
   # Povolené rozšírenia
   scanFiles:
