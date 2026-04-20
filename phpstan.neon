@@ -1,0 +1,37 @@
+parameters:
+  level: max
+
+  paths:
+    - src
+    - tests
+
+  # Ignoruj vendor a build priečinky
+  excludePaths:
+    - vendor
+    - build
+    - var
+    - .github
+
+  # Povolené rozšírenia
+  scanFiles:
+    - %rootDir%/../../vendor/autoload.php
+
+  # Prísnejšie pravidlá
+  checkMissingIterableValueType: true
+  checkGenericClassInNonGenericObjectType: true
+  checkMissingCallableSignature: true
+  checkUninitializedProperties: true
+  checkImplicitMixed: true
+  checkExplicitMixed: true
+  checkMissingVarTagTypehint: true
+  checkMissingTypehints: true
+
+  # Povolené typy pre JSON decode, API odpovede a dynamické polia
+  universalObjectCratesClasses:
+    - stdClass
+
+  # Ignorované chyby (prázdne, aby si mal čistý štart)
+  ignoreErrors: []
+
+  # Limit pamäte pre veľké projekty
+  memoryLimit: 1G
