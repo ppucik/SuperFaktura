@@ -29,18 +29,19 @@ final readonly class CompanyData
      */
     public static function fromAresResponse(array $data): self
     {
-        $address = $data['sidlo'] ?? [];
+        /** @var array<string, mixed> $address */
+        $address = is_array($data['sidlo'] ?? null) ? $data['sidlo'] : [];
 
         return new self(
-            ico:       (string) ($data['ico'] ?? ''),
-            name:      (string) ($data['obchodniJmeno'] ?? $data['jmeno'] ?? ''),
-            dic:       isset($data['dic']) ? (string) $data['dic'] : null,
-            legalForm: isset($data['pravniForma']) ? (string) $data['pravniForma'] : null,
-            street:    self::buildStreet($address),
-            city:      isset($address['nazevObce']) ? (string) $address['nazevObce'] : null,
-            zip:       isset($address['psc']) ? (string) $address['psc'] : null,
-            country:   isset($address['nazevStatu']) ? (string) $address['nazevStatu'] : null,
-            isActive:  in_array($data['stavSubjektu'] ?? null, ['AKTIVNI', 'AKTIVNÍ'], true),
+            ico: self::stringOrEmpty($data['ico'] ?? null),
+            name: self::stringOrEmpty($data['obchodniJmeno'] ?? $data['jmeno'] ?? null),
+            dic: self::stringOrNull($data['dic'] ?? null),
+            legalForm: self::stringOrNull($data['pravniForma'] ?? null),
+            street: self::buildStreet($address),
+            city: self::stringOrNull($address['nazevObce'] ?? null),
+            zip: self::stringOrNull($address['psc'] ?? null),
+            country: self::stringOrNull($address['nazevStatu'] ?? null),
+            isActive: self::boolFromStatus($data['stavSubjektu'] ?? null),
         );
     }
 
@@ -71,12 +72,48 @@ final readonly class CompanyData
      */
     private static function buildStreet(array $address): ?string
     {
-        $parts = array_filter([
-            $address['nazevUlice'] ?? $address['nazevCastiObce'] ?? null,
-            isset($address['cisloDomovni']) ? (string) $address['cisloDomovni'] : null,
-            isset($address['cisloOrientacni']) ? '/' . $address['cisloOrientacni'] : null,
-        ]);
+        $street = $address['nazevUlice'] ?? $address['nazevCastiObce'] ?? null;
+        $house  = $address['cisloDomovni'] ?? null;
+        $orient = $address['cisloOrientacni'] ?? null;
 
-        return $parts ? implode(' ', $parts) : null;
+        if (!is_string($street)) {
+            return null;
+        }
+
+        $parts = [$street];
+
+        if (is_string($house)) {
+            $parts[] = $house;
+        }
+
+        if (is_string($orient)) {
+            $parts[] = '/' . $orient;
+        }
+
+        return implode(' ', $parts);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private static function stringOrEmpty(mixed $value): string
+    {
+        return is_string($value) ? $value : '';
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private static function stringOrNull(mixed $value): ?string
+    {
+        return is_string($value) ? $value : null;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private static function boolFromStatus(mixed $value): bool
+    {
+        return is_string($value) && in_array($value, ['AKTIVNI', 'AKTIVNÍ'], true);
     }
 }
