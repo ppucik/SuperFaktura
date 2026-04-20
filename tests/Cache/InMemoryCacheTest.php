@@ -14,6 +14,8 @@ class InMemoryCacheTest extends TestCase
     protected function setUp(): void
     {
         $this->cache = new InMemoryCache();
+
+        assert($this->cache instanceof InMemoryCache);
     }
 
     public function testGetReturnsNullForMissingKey(): void

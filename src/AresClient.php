@@ -102,6 +102,7 @@ class AresClient implements AresClientInterface
             );
         }
 
+        /** @var array<string, mixed> $decoded */
         return $decoded;
     }
 }
