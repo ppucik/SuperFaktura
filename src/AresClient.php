@@ -79,7 +79,7 @@ class AresClient implements AresClientInterface
 
     /**
      * Decode JSON response and handle errors.
-     * 
+     *
      * @param string $body The raw JSON response body
      * @param string $ico The IČO for error context
      * @return array<string, mixed>
@@ -87,7 +87,8 @@ class AresClient implements AresClientInterface
      */
     private function decodeJson(string $body, string $ico): array
     {
-        $data = json_decode($body, associative: true);
+        /** @var mixed $decoded */
+        $decoded = json_decode($body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new AresException(
@@ -95,6 +96,12 @@ class AresClient implements AresClientInterface
             );
         }
 
-        return $data;
+        if (!is_array($decoded)) {
+            throw new AresException(
+                "Invalid JSON structure returned by ARES for IČO '{$ico}'. Expected array, got " . gettype($decoded)
+            );
+        }
+
+        return $decoded;
     }
 }

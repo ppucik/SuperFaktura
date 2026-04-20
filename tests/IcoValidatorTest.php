@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class IcoValidatorTest extends TestCase
 {
-    private IcoValidator $validator;
+    private ?IcoValidator $validator = null;
 
     protected function setUp(): void
     {

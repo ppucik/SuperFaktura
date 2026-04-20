@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class InMemoryCacheTest extends TestCase
 {
-    private InMemoryCache $cache;
+    private ?InMemoryCache $cache = null;
 
     protected function setUp(): void
     {
