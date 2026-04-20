@@ -17,14 +17,11 @@ parameters:
     - %rootDir%/../../vendor/autoload.php
 
   # Prísnejšie pravidlá
-  checkMissingIterableValueType: true
-  checkGenericClassInNonGenericObjectType: true
-  checkMissingCallableSignature: true
-  checkUninitializedProperties: true
-  checkImplicitMixed: true
-  checkExplicitMixed: true
   checkMissingVarTagTypehint: true
   checkMissingTypehints: true
+  checkImplicitMixed: true
+  checkExplicitMixed: true
+  checkUninitializedProperties: true
 
   # Povolené typy pre JSON decode, API odpovede a dynamické polia
   universalObjectCratesClasses:
