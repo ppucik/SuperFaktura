@@ -24,6 +24,8 @@ final readonly class CompanyData
 
     /**
      * Factory method: build from raw ARES API array response.
+     *
+     * @param array<string, mixed> $data
      */
     public static function fromAresResponse(array $data): self
     {
@@ -44,6 +46,8 @@ final readonly class CompanyData
 
     /**
      * Export to a plain associative array (e.g. for JSON encoding or further processing).
+     *
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -62,6 +66,9 @@ final readonly class CompanyData
         ];
     }
 
+    /**
+     * @param array<string, mixed> $address
+     */
     private static function buildStreet(array $address): ?string
     {
         $parts = array_filter([

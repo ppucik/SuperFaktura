@@ -13,11 +13,15 @@ interface CacheInterface
     /**
      * Retrieve cached data by key.
      * Returns null if key does not exist or has expired.
+     *
+     * @return array<string, mixed>|null
      */
     public function get(string $key): ?array;
 
     /**
      * Store data under a key for a given TTL (seconds).
+     *
+     * @param array<string, mixed> $data
      */
     public function set(string $key, array $data, int $ttl = 3600): void;
 

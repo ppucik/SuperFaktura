@@ -25,6 +25,7 @@ class AresClient implements AresClientInterface
     /**
      * Fetch raw JSON data from ARES for a given IČO.
      *
+     * @return array<string, mixed>
      * @throws AresNotFoundException   If the company is not found (HTTP 404)
      * @throws AresConnectionException If the request fails due to network/timeout
      * @throws AresException           For any other unexpected API error
@@ -50,7 +51,7 @@ class AresClient implements AresClientInterface
             );
         }
 
-        $statusCode = $this->parseStatusCode($http_response_header ?? []);
+        $statusCode = $this->parseStatusCode((array) ($http_response_header));
 
         return match (true) {
             $statusCode === 404 => throw new AresNotFoundException("Company with IČO '{$ico}' was not found in ARES."),

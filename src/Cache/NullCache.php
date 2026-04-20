@@ -14,11 +14,17 @@ use SuperFaktura\Contract\CacheInterface;
  */
 final class NullCache implements CacheInterface
 {
+    /**
+     * @return array<string, mixed>|null
+     */
     public function get(string $key): ?array
     {
         return null;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function set(string $key, array $data, int $ttl = 3600): void
     {
         // intentionally empty

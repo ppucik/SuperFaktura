@@ -19,9 +19,12 @@ use SuperFaktura\Contract\CacheInterface;
  */
 final class InMemoryCache implements CacheInterface
 {
-    /** @var array<string, array{data: array, expires_at: int}> */
+    /** @var array<string, array{data: array<string, mixed>, expires_at: int}> */
     private array $store = [];
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function get(string $key): ?array
     {
         if (!isset($this->store[$key])) {
@@ -36,6 +39,9 @@ final class InMemoryCache implements CacheInterface
         return $this->store[$key]['data'];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function set(string $key, array $data, int $ttl = 3600): void
     {
         $this->store[$key] = [

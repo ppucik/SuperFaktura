@@ -39,6 +39,7 @@ class RetryableAresClient implements AresClientInterface
     /**
      * Fetch company data with cache + retry + logging.
      *
+     * @return array<string, mixed>
      * Cache hit  → return immediately, no HTTP call.
      * Cache miss → attempt HTTP call up to $maxRetries times.
      *              Only AresConnectionException triggers a retry.
@@ -78,6 +79,7 @@ class RetryableAresClient implements AresClientInterface
                 ]);
 
                 return $data;
+
             } catch (AresNotFoundException $e) {
                 // 404 is permanent — retrying will not help
                 $this->logger->warning('ARES company not found', [
@@ -85,6 +87,7 @@ class RetryableAresClient implements AresClientInterface
                     'error' => $e->getMessage(),
                 ]);
                 throw $e;
+
             } catch (AresConnectionException $e) {
                 // transient failure — worth retrying
                 $lastError = $e;
@@ -101,6 +104,7 @@ class RetryableAresClient implements AresClientInterface
                 if ($attempt < $this->maxRetries) {
                     $this->sleep($delayMs);
                 }
+
             } catch (AresException $e) {
                 // unexpected API error — log and rethrow immediately
                 $this->logger->error('ARES API error', [
@@ -120,7 +124,7 @@ class RetryableAresClient implements AresClientInterface
 
         throw new AresConnectionException(
             "ARES API unreachable for IČO '{$ico}' after {$this->maxRetries} attempts. " .
-                "Last error: " . ($lastError?->getMessage() ?? 'unknown'),
+            "Last error: " . ($lastError?->getMessage() ?? 'unknown'),
             previous: $lastError,
         );
     }
@@ -131,7 +135,7 @@ class RetryableAresClient implements AresClientInterface
      */
     private function exponentialDelay(int $attempt): int
     {
-        return min(
+        return (int) min(
             $this->baseDelayMs * (2 ** ($attempt - 1)),
             5_000,
         );

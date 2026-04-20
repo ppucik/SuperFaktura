@@ -29,13 +29,16 @@ class IcoValidatorTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    /**
+     * @return array<string, array{string, string}>
+     */
     public static function validIcoProvider(): array
     {
         return [
             'Škoda Auto'              => ['00177041', '00177041'],
             'ČEZ'                     => ['45274649', '45274649'],
             'short ico padded'        => ['177041',   '00177041'],  // auto-padded
-            'Anthropic CZ (example)'  => ['01569651', '01569651'],
+            'Anthropic CZ (example)' => ['01569651', '01569651'],
         ];
     }
 
@@ -51,6 +54,9 @@ class IcoValidatorTest extends TestCase
         $this->validator->validate($ico);
     }
 
+    /**
+     * @return array<string, array{string, string}>
+     */
     public static function invalidIcoProvider(): array
     {
         return [

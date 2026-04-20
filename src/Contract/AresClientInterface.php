@@ -17,6 +17,7 @@ interface AresClientInterface
     /**
      * Fetch raw JSON data from ARES for a given IČO.
      *
+     * @return array<string, mixed>
      * @throws AresNotFoundException   If the company is not found (HTTP 404)
      * @throws AresConnectionException If the request fails due to network/timeout
      * @throws AresException           For any other unexpected API error

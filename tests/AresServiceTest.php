@@ -18,6 +18,9 @@ class AresServiceTest extends TestCase
     // Helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * @param array<string, mixed> $rawApiResponse
+     */
     private function makeService(array $rawApiResponse): AresService
     {
         $validator = new IcoValidator();
@@ -28,6 +31,9 @@ class AresServiceTest extends TestCase
         return new AresService($validator, $client);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function sampleApiResponse(string $ico = '01569651'): array
     {
         return [
@@ -70,6 +76,7 @@ class AresServiceTest extends TestCase
 
         $this->assertSame('Praha', $company->city);
         $this->assertSame('11000', $company->zip);
+        $this->assertNotNull($company->street);
         $this->assertStringContainsString('Wenceslas Square', $company->street);
     }
 
