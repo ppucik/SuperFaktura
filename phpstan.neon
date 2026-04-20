@@ -29,6 +29,3 @@ parameters:
 
   # Ignorované chyby (prázdne, aby si mal čistý štart)
   ignoreErrors: []
-
-  # Limit pamäte pre veľké projekty
-  memoryLimit: 1G
