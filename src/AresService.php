@@ -41,21 +41,21 @@ class AresService
      * AresClient → RetryableAresClient (cache + retry + logging)
      */
     public static function create(
-        int             $timeoutSeconds = 10,
+        int              $timeoutSeconds = 10,
         ?CacheInterface  $cache          = null,
         ?LoggerInterface $logger         = null,
     ): self {
         $inner = new AresClient(timeout: $timeoutSeconds);
 
         $retryable = new RetryableAresClient(
-            inner:   $inner,
-            cache:   $cache  ?? new NullCache(),
-            logger:  $logger ?? new NullLogger(),
+            inner: $inner,
+            cache: $cache  ?? new NullCache(),
+            logger: $logger ?? new NullLogger(),
         );
 
         return new self(
             validator: new IcoValidator(),
-            client:    $retryable,
+            client: $retryable,
         );
     }
 
@@ -96,4 +96,3 @@ class AresService
         return $results;
     }
 }
-

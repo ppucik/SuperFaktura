@@ -43,6 +43,7 @@ class AresClient implements AresClientInterface
             ],
         ]);
 
+        $http_response_header = [];
         $response = @file_get_contents($url, false, $context);
 
         if ($response === false) {
@@ -51,7 +52,7 @@ class AresClient implements AresClientInterface
             );
         }
 
-        $statusCode = $this->parseStatusCode((array) ($http_response_header));
+        $statusCode = $this->parseStatusCode($http_response_header);
 
         return match (true) {
             $statusCode === 404 => throw new AresNotFoundException("Company with IČO '{$ico}' was not found in ARES."),

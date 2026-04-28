@@ -38,7 +38,7 @@ class IcoValidatorTest extends TestCase
             'Škoda Auto'              => ['00177041', '00177041'],
             'ČEZ'                     => ['45274649', '45274649'],
             'short ico padded'        => ['177041',   '00177041'],  // auto-padded
-            'Anthropic CZ (example)' => ['01569651', '01569651'],
+            'Anthropic CZ (example)'  => ['01569651', '01569651'],
         ];
     }
 
