@@ -13,6 +13,7 @@ use SuperFaktura\Contract\CacheInterface;
 use SuperFaktura\DTO\CompanyData;
 use SuperFaktura\Exception\AresException;
 use SuperFaktura\Exception\InvalidIcoException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Main entry point of the ARES library.
@@ -40,17 +41,23 @@ class AresService implements AresServiceInterface
     /**
      * Convenience factory — wires up the full decorator stack:
      * AresClient → RetryableAresClient (cache + retry + logging)
+     *
+     * @param HttpClientInterface|null $httpClient Custom Symfony HTTP client (e.g. MockHttpClient for tests)
      */
     public static function create(
-        int              $timeoutSeconds = 10,
-        ?CacheInterface  $cache          = null,
-        ?LoggerInterface $logger         = null,
+        int                  $timeoutSeconds = 10,
+        ?CacheInterface      $cache          = null,
+        ?LoggerInterface     $logger         = null,
+        ?HttpClientInterface $httpClient     = null,
     ): self {
-        $inner = new AresClient(timeout: $timeoutSeconds);
+        $inner = new AresClient(
+            timeout:    $timeoutSeconds,
+            httpClient: $httpClient,
+        );
 
         $retryable = new RetryableAresClient(
-            inner: $inner,
-            cache: $cache  ?? new NullCache(),
+            inner:  $inner,
+            cache:  $cache  ?? new NullCache(),
             logger: $logger ?? new NullLogger(),
         );
 

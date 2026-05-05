@@ -8,6 +8,7 @@ Navrhnutá podľa SOLID princípov s dôrazom na kvalitu kódu, testovateľnosť
 - PHP 8.2+
 - Composer
 - `psr/log: ^3.0`
+- `symfony/http-client: ^7.0`
 
 ## Inštalácia
 
@@ -54,6 +55,19 @@ $service = AresService::create(
 );
 
 $company = $service->getByIco('45274649');
+```
+
+### V testoch s MockHttpClient
+
+```php
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+
+$service = AresService::create(
+    httpClient: new MockHttpClient(
+        new MockResponse('{"ico":"45274649"}', ['http_code' => 200])
+    ),
+);
 ```
 
 ### Hromadné vyhľadávanie
@@ -164,15 +178,16 @@ vendor\bin\phpunit --testdox
 vendor\bin\phpstan analyse src tests --level=8
 ```
 
-Pokrytie testami: **39 testov**, vrátane:
+Pokrytie testami: **47 testov**, vrátane:
 
 - validácia IČO (formát, checksum, diakritika, padding)
+- `AresClient` — HTTP 200/404/500, transport error, invalid JSON, správna URL (MockHttpClient)
 - cache hit / miss / TTL expirácia
 - retry logika (úspech po retry, vyčerpanie pokusov, exception chaining)
 - logovanie (info, warning, error pri každej udalosti)
 - batch lookup s čiastočnými chybami
 - mapovanie DTO (adresa, isActive s/bez diakritiky)
-- `AresServiceInterface` — overenie kontraktu a možnosti použitia mockov
+- `AresServiceInterface` — overenie kontraktu a mocknuteľnosť
 
 ---
 
@@ -199,6 +214,7 @@ src/
     AresNotFoundException.php   # Firma nenájdená
     AresConnectionException.php # Sieťová chyba
 tests/
+  AresClientTest.php            # Testy HTTP klienta cez MockHttpClient (8 testov)
   AresServiceTest.php           # Testy fasády + interface kontraktu (18 testov)
   IcoValidatorTest.php          # Testy validátora (8 testov)
   RetryableAresClientTest.php   # Testy retry + cache + logging (14 testov)
