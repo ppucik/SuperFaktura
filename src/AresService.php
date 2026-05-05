@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SuperFaktura\Cache\NullCache;
 use SuperFaktura\Contract\AresClientInterface;
+use SuperFaktura\Contract\AresServiceInterface;
 use SuperFaktura\Contract\CacheInterface;
 use SuperFaktura\DTO\CompanyData;
 use SuperFaktura\Exception\AresException;
@@ -29,7 +30,7 @@ use SuperFaktura\Exception\InvalidIcoException;
  *       logger: $myPsrLogger,
  *   );
  */
-class AresService
+class AresService implements AresServiceInterface
 {
     public function __construct(
         private readonly IcoValidator        $validator,

@@ -188,6 +188,7 @@ src/
     InMemoryCache.php           # TTL cache v pamäti procesu
   Contract/
     AresClientInterface.php     # Kontrakt pre HTTP klienta
+    AresServiceInterface        # Kontrakt ARES service
     CacheInterface.php          # Kontrakt pre cache backend
   DTO/
     CompanyData.php             # Immutable readonly DTO

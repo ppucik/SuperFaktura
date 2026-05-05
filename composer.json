@@ -1,10 +1,10 @@
 {
-  "name": "ares/client",
+  "name": "superfaktura/ares-client",
   "description": "PHP library for fetching company data from Czech ARES register",
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=8.1",
+    "php": ">=8.2",
     "psr/log": "^3.0"
   },
   "require-dev": {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SuperFaktura\Tests;
 
 use SuperFaktura\Contract\AresClientInterface;
+use SuperFaktura\Contract\AresServiceInterface;
 use SuperFaktura\AresService;
 use SuperFaktura\DTO\CompanyData;
 use SuperFaktura\Exception\AresNotFoundException;
@@ -21,7 +22,7 @@ class AresServiceTest extends TestCase
     /**
      * @param array<string, mixed> $rawApiResponse
      */
-    private function makeService(array $rawApiResponse): AresService
+    private function makeService(array $rawApiResponse): AresServiceInterface
     {
         $validator = new IcoValidator();
 
@@ -51,6 +52,31 @@ class AresServiceTest extends TestCase
                 'nazevStatu'    => 'Česká republika',
             ],
         ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Interface contract
+    // -------------------------------------------------------------------------
+
+    public function testAresServiceImplementsInterface(): void
+    {
+        $service = $this->makeService($this->sampleApiResponse());
+
+        $this->assertInstanceOf(AresServiceInterface::class, $service);
+    }
+
+    public function testCanBeMockedViaInterface(): void
+    {
+        $expected = CompanyData::fromAresResponse($this->sampleApiResponse());
+
+        $mock = $this->createMock(AresServiceInterface::class);
+        $mock->method('getByIco')->willReturn($expected);
+
+        // simuluje použitie v inej triede závislej od interface
+        $result = $mock->getByIco('01569651');
+
+        $this->assertSame('Testovací s.r.o.', $result->name);
+        $this->assertSame('01569651', $result->ico);
     }
 
     // -------------------------------------------------------------------------
