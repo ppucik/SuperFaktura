@@ -164,7 +164,7 @@ vendor\bin\phpunit --testdox
 vendor\bin\phpstan analyse src tests --level=8
 ```
 
-Pokrytie testami: **35 testov**, vrátane:
+Pokrytie testami: **39 testov**, vrátane:
 
 - validácia IČO (formát, checksum, diakritika, padding)
 - cache hit / miss / TTL expirácia
@@ -172,6 +172,7 @@ Pokrytie testami: **35 testov**, vrátane:
 - logovanie (info, warning, error pri každej udalosti)
 - batch lookup s čiastočnými chybami
 - mapovanie DTO (adresa, isActive s/bez diakritiky)
+- `AresServiceInterface` — overenie kontraktu a možnosti použitia mockov
 
 ---
 
@@ -188,7 +189,7 @@ src/
     InMemoryCache.php           # TTL cache v pamäti procesu
   Contract/
     AresClientInterface.php     # Kontrakt pre HTTP klienta
-    AresServiceInterface        # Kontrakt ARES service
+    AresServiceInterface.php    # Kontrakt pre hlavnú službu
     CacheInterface.php          # Kontrakt pre cache backend
   DTO/
     CompanyData.php             # Immutable readonly DTO
@@ -198,11 +199,12 @@ src/
     AresNotFoundException.php   # Firma nenájdená
     AresConnectionException.php # Sieťová chyba
 tests/
-  AresServiceTest.php           # Testy fasády (16 testov)
+  AresServiceTest.php           # Testy fasády + interface kontraktu (18 testov)
   IcoValidatorTest.php          # Testy validátora (8 testov)
   RetryableAresClientTest.php   # Testy retry + cache + logging (14 testov)
   Cache/
     InMemoryCacheTest.php       # Testy cache (7 testov)
+doc/                            # Dodatočná dokumentácia
 ```
 
 ---
@@ -214,5 +216,26 @@ tests/
 | **S** – Single Responsibility | Každá trieda má jednu zodpovednosť: validácia (`IcoValidator`), HTTP (`AresClient`), retry/cache/log (`RetryableAresClient`), mapovanie (`CompanyData`), orchester (`AresService`) |
 | **O** – Open/Closed           | Nový cache backend = nová trieda implementujúca `CacheInterface`, bez zmeny existujúceho kódu                                                                                      |
 | **L** – Liskov                | `NullCache` a `InMemoryCache` sú plne zameniteľné cez `CacheInterface`; všetky výnimky dedia od `AresException`                                                                    |
-| **I** – Interface Segregation | Dve malé rozhrania (`AresClientInterface`, `CacheInterface`) namiesto jedného veľkého                                                                                              |
-| **D** – Dependency Inversion  | `AresService` závisí od `AresClientInterface` a `CacheInterface`, nie od konkrétnych tried                                                                                         |
+| **I** – Interface Segregation | Tri malé rozhrania (`AresClientInterface`, `AresServiceInterface`, `CacheInterface`) namiesto jedného veľkého                                                                      |
+| **D** – Dependency Inversion  | `AresService` závisí od `AresClientInterface` a `CacheInterface`, nie od konkrétnych tried; `AresServiceInterface` umožňuje mockovanie v integračných testoch                      |
+
+---
+
+## Nástroje kvality
+
+```bash
+# Unit testy (39 testov)
+vendor\bin\phpunit --testdox
+
+# Statická analýza — PHPStan level 8, 0 errors
+vendor\bin\phpstan analyse src tests --level=8
+
+# Code style — PHP CS Fixer
+vendor\bin\php-cs-fixer fix --dry-run
+```
+
+`composer.json` obsahuje všetky nástroje:
+
+- `phpunit/phpunit: ^11.0`
+- `phpstan/phpstan: ^2.1`
+- `friendsofphp/php-cs-fixer: ^3.0`
