@@ -1,4 +1,4 @@
-# ARES PHP Client
+# SuperFaktura - ARES PHP Client
 
 PHP knižnica na načítanie údajov firiem z českého registra spoločností (ARES).
 Navrhnutá podľa SOLID princípov s dôrazom na kvalitu kódu, testovateľnosť a robustnosť.
